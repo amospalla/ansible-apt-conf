@@ -1,0 +1,2 @@
+---
+apt_conf_config_file: /etc/apt/apt.conf.d/99apt-conf-ansible-managed

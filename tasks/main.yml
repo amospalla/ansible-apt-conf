@@ -1,0 +1,52 @@
+---
+- name: Find files on /etc/apt/apt.conf.d
+  find:
+    paths: /etc/apt/apt.conf.d
+    recurse: True
+  register: register_find
+  when: ansible_os_family == 'Debian'
+  tags:
+    - apt-conf
+
+- name: Include apt-conf-remove.yml with found files
+  include: apt-conf-remove.yml
+  with_items: '{{ register_find.files }}'
+  loop_control:
+    loop_var: file
+  when: ansible_os_family == 'Debian' and file.isreg
+  tags:
+    - apt-conf
+
+- name: Find file /etc/apt/apt.conf
+  find:
+    paths: /etc/apt
+    recurse: False
+    patterns: 'apt.conf'
+  register: register_find
+  when: ansible_os_family == 'Debian'
+  tags:
+    - apt-conf
+
+- name: Include apt-conf-remove.yml with found files
+  include: apt-conf-remove.yml
+  with_items: '{{ register_find.files }}'
+  loop_control:
+    loop_var: file
+  when: ansible_os_family == 'Debian' and file.isreg
+  tags:
+    - apt-conf
+
+- name: Add entries
+  lineinfile:
+    dest: '{{ apt_conf_config_file }}'
+    regexp: '^{{ item.key }} '
+    line: '{{ item.key }} {{ item.value }}'
+    state: present
+    mode: 0644
+    owner: root
+    group: root
+    create: True
+  with_items: '{{ apt_conf_entries }}'
+  when: item.enable
+  tags:
+    - apt-conf

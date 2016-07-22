@@ -16,9 +16,24 @@ Mandatory:
 ```
 apt_conf_entries:
   - key: Acquire::http::Proxy
-    value: http://some_url
+    value: '"http://some_url";'
     enable: True
 ```
 
 Optional:
 - _apt_conf_config_file_: defaults to /etc/apt/apt.conf.d/99apt-conf-ansible-managed
+
+## Some apt-conf entries
+
+apt_conf_entries:
+  - comment: /etc/cron.daily/apt: upt-get update
+    key: APT::Periodic::Update-Package-Lists
+    value: '"0";'
+    enable: True
+  - comment: /etc/cron.daily/apt: upt-get download upgradeable packages
+    key: APT::Periodic::Download-Upgradeable-Packages
+    value: '"0";'
+    enable: True
+  - key: APT::Periodic::AutocleanInterval
+    value: '"0";'
+    enable: True

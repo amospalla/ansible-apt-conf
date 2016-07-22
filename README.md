@@ -25,6 +25,7 @@ Optional:
 
 ## Some apt-conf entries
 
+```
 apt_conf_entries:
   - comment: /etc/cron.daily/apt: upt-get update
     key: APT::Periodic::Update-Package-Lists
@@ -37,3 +38,4 @@ apt_conf_entries:
   - key: APT::Periodic::AutocleanInterval
     value: '"0";'
     enable: True
+```

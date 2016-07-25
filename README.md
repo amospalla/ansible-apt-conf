@@ -28,14 +28,16 @@ Optional:
 
 ## Some apt-conf entries
 
+The 'comment' key is used below just for commenting, not used at all.
+
 ```
 apt_conf_entries:
-  - comment: /etc/cron.daily/apt: upt-get update
+  - comment: '/etc/cron.daily/apt: upt-get update'
     key: APT::Periodic::Update-Package-Lists
     value: '"0";'
 	path: /etc/apt/apt.conf.d/10periodic
     enable: True
-  - comment: /etc/cron.daily/apt: upt-get download upgradeable packages
+  - comment: '/etc/cron.daily/apt: upt-get download upgradeable packages'
     key: APT::Periodic::Download-Upgradeable-Packages
     value: '"0";'
     enable: True

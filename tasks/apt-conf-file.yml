@@ -1,0 +1,30 @@
+---
+- name: Set entry on this file if same path
+  lineinfile:
+    create: True
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+    line: '{{ list_item.key }} {{ list_item.value }}'
+    dest: '{{ found_file.path }}'
+  when: found_file.path == list_item.path|default(apt_conf_config_file)
+        and list_item.enable
+
+- name: Mark entry insert as done
+  set_fact:
+    apt_conf_list_entry: True
+  when: found_file.path == list_item.path|default(apt_conf_config_file)
+        and list_item.enable
+
+- name: Remove entry on this file if same path
+  lineinfile:
+    dest: '{{ found_file.path }}'
+    regexp: '^{{ list_item.key }}\s+.*'
+    state: absent
+    mode: 0644
+    owner: root
+    group: root
+    create: False
+  when: found_file.path != list_item.path|default(apt_conf_config_file)
+        or not list_item.enable
